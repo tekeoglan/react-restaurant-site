@@ -19,7 +19,7 @@
   font-size: 1.625rem;
   line-height: 1.875rem;
   text-transform: uppercase;
-  color: var(--red);
+  color: var(--secondary-color);
 }
 
 .headerMiddle {

@@ -1,22 +1,39 @@
 import styles from "./Product.module.css";
-import { ReactComponent as LeftButton } from "../../assets/addcart_btn.svg";
-import { ReactComponent as RightButton } from "../../assets/book_btn.svg";
+import { ReactComponent as RedLeftButton } from "../../assets/red_left_btn.svg";
+import { ReactComponent as LightRedLeftButton } from "../../assets/light_red_left_btn.svg";
+import { ReactComponent as GreenLeftButton } from "../../assets/green_left_btn.svg";
+import { ReactComponent as YellowLeftButton } from "../../assets/yellow_left_btn.svg";
+import { ReactComponent as RightButton } from "../../assets/right_btn.svg";
 import { ReactComponent as BackwardArrowIcon } from "../../assets/arrow_back.svg";
 import { ReactComponent as ForwardArrowIcon } from "../../assets/arrow_forward.svg";
+import { ProductInterface } from "../../constants/products";
+import { useEffect } from "react";
 
-function Product() {
+const leftButtons: any = {
+  red: <RedLeftButton />,
+  light_red: <LightRedLeftButton />,
+  green: <GreenLeftButton />,
+  yellow: <YellowLeftButton />,
+};
+
+function Product({
+  title,
+  description,
+  image,
+  leftButtonType,
+  color,
+}: ProductInterface) {
+  useEffect(() => {
+    const root = window.document.documentElement;
+    if (!root) return;
+    root.style.setProperty("--secondary-color", color);
+  }, []);
   return (
     <div className={styles.container}>
       <div className={styles.left}>
         <div className={styles.props}>
-          <h2>steak with tomato</h2>
-          <p>
-            Salisbury Steak is made with ground beef that has been shaped into
-            patties,
-            <br /> while Swiss Steak is made with actual steak. For Swiss Steak,
-            the beef is rolled or
-            <br /> pounded and then braised in a
-          </p>
+          <h2>{title}</h2>
+          <p>{description}</p>
           <form>
             <span>
               <input type="radio" name="size" value="medium" />
@@ -30,7 +47,7 @@ function Product() {
         </div>
         <div className={styles.leftSplitter}></div>
         <div className={styles.buttons}>
-          <LeftButton />
+          {leftButtons[leftButtonType]}
           <RightButton />
         </div>
         <div className={styles.leftLookBook}>
@@ -40,10 +57,7 @@ function Product() {
       </div>
       <div className={styles.right}>
         <div className={styles.foodCover}>
-          <img
-            src={require("../../assets/steak_with_tomato.png")}
-            alt="stake & tomato"
-          />
+          <img src={require(`../../${image}`)} alt="food" />
         </div>
         <div className={styles.discountCoupon}>
           <div className={styles.couponTop}>

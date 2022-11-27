@@ -1,4 +1,6 @@
 import { useRef, useEffect, useState, CSSProperties } from "react";
+import { throttle } from "lodash";
+
 import {
   easings,
   useTransition,
@@ -8,36 +10,54 @@ import {
 } from "@react-spring/web";
 
 import Product from "../../compenents/Product";
+import { products } from "../../constants/products";
 import styles from "./Products.module.css";
 
-const productData = [
-  { id: 0, title: "steak with tomato" },
-  { id: 1, title: "salmon salad" },
-  { id: 2, title: "chicken salad" },
-  { id: 3, title: "steak with potato" },
-];
-
-const products: ((
+const foods: ((
   props: AnimatedProps<{ style: CSSProperties }>
 ) => JSX.Element)[] = [
   ({ style }) => (
     <animated.div style={style}>
-      <Product />
+      <Product
+        title={products[0].title}
+        description={products[0].description}
+        image={products[0].image}
+        leftButtonType={products[0].leftButtonType}
+        color={products[0].color}
+      />
     </animated.div>
   ),
   ({ style }) => (
     <animated.div style={style}>
-      <Product />
+      <Product
+        title={products[1].title}
+        description={products[1].description}
+        image={products[1].image}
+        leftButtonType={products[1].leftButtonType}
+        color={products[1].color}
+      />
     </animated.div>
   ),
   ({ style }) => (
     <animated.div style={style}>
-      <Product />
+      <Product
+        title={products[2].title}
+        description={products[2].description}
+        image={products[2].image}
+        leftButtonType={products[2].leftButtonType}
+        color={products[2].color}
+      />
     </animated.div>
   ),
   ({ style }) => (
     <animated.div style={style}>
-      <Product />
+      <Product
+        title={products[3].title}
+        description={products[3].description}
+        image={products[3].image}
+        leftButtonType={products[3].leftButtonType}
+        color={products[3].color}
+      />
     </animated.div>
   ),
 ];
@@ -58,27 +78,37 @@ function Products() {
     },
   });
 
-  const scrollHandler = (e: any) => {
-    const scrollingElement = e.target.scrollingElement;
-
-    if (scrollingElement.scrollTop >= scrollingElement.scrollTopMax) {
-      setProudctIndex((prev) => {
-        if (prev === 3) return prev;
-        return prev + 1;
-      });
-    } else if (scrollingElement.scrollTop === 0) {
-      setProudctIndex((prev) => {
-        if (prev === 0) return prev;
-        return prev - 1;
-      });
-    }
-  };
-
   useEffect(() => {
-    window.addEventListener("scroll", scrollHandler);
+    if (!window) return;
+    window.addEventListener(
+      "scroll",
+      throttle(
+        (e) => {
+          const el = e.target.scrollingElement;
+
+          const treshHold = Math.abs(
+            el.scrollHeight - el.clientHeight - el.scrollTop
+          );
+          if (treshHold < 1) {
+            setProudctIndex((prev) => {
+              if (prev === 3) return prev;
+              return prev + 1;
+            });
+          }
+          if (el.scrollTop === 0) {
+            setProudctIndex((prev) => {
+              if (prev === 0) return prev;
+              return prev - 1;
+            });
+          }
+        },
+        250,
+        { leading: true, trailing: true }
+      )
+    );
 
     return () => {
-      window.removeEventListener("scroll", scrollHandler);
+      window.removeEventListener("scroll", () => {});
     };
   }, []);
 
@@ -96,7 +126,7 @@ function Products() {
   return (
     <div className={styles.products}>
       {transitions((style, i) => {
-        const Product = products[i];
+        const Product = foods[i];
         return <Product style={style} />;
       })}
       <div className={styles.foodCoverSlider} ref={sliderRef}>
