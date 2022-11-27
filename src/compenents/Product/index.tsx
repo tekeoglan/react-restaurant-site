@@ -44,12 +44,6 @@ function Product() {
             src={require("../../assets/steak_with_tomato.png")}
             alt="stake & tomato"
           />
-          <div className={styles.foodCoverSlider}>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
         </div>
         <div className={styles.discountCoupon}>
           <div className={styles.couponTop}>
