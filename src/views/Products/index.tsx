@@ -72,9 +72,10 @@ function Products() {
     keys: (item) => item,
     from: { opacity: 0, transform: "scale(0.75) translate(0, -20vh)" },
     enter: { opacity: 1, transform: "scale(1) translate(0, 0)" },
-    leave: { opacity: 0, transform: "scale(0.75) translate(0, 20vh)" },
+    leave: { opacity: 0, transform: "scale(0.75) translate(0, 100vh)" },
     config: {
-      easing: easings.easeInBounce,
+      easing: easings.easeInQuart,
+      duration: 400,
     },
   });
 
